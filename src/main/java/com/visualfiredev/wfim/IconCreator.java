@@ -1,6 +1,7 @@
 package com.visualfiredev.wfim;
 
 import de.codecentric.centerdevice.javafxsvg.BufferedImageTranscoder;
+import javafx.util.Pair;
 import net.sf.image4j.codec.ico.ICODecoder;
 import net.sf.image4j.codec.ico.ICOEncoder;
 import org.apache.batik.transcoder.TranscoderException;
@@ -11,9 +12,11 @@ import org.imgscalr.Scalr;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -50,17 +53,17 @@ public class IconCreator {
     }
 
     // Load Source
-    public void loadSource(File file) throws IOException, TranscoderException {
-        if (file.getName().contains(".png")) {
-            source = ImageIO.read(file); // TODO: Take CLI arguments
-        } else if (file.getName().contains(".ico")) {
+    public void loadSource(Path file) throws IOException, TranscoderException {
+        if (file.toString().contains(".png")) {
+            source = ImageIO.read(file.toFile()); // TODO: Take CLI arguments
+        } else if (file.toString().contains(".ico")) {
             // Load Icons
-            List<BufferedImage> icons = ICODecoder.read(file);
+            List<BufferedImage> icons = ICODecoder.read(file.toFile());
 
             // Find Biggest Size
             source = icons.stream().max(Comparator.comparingInt(BufferedImage::getWidth)).get();
-        } else if (file.getName().contains(".svg")) {
-            TranscoderInput svg = new TranscoderInput(Files.newBufferedReader(file.toPath()));
+        } else if (file.toString().contains(".svg")) {
+            TranscoderInput svg = new TranscoderInput(Files.newBufferedReader(file));
             BufferedImageTranscoder transcoder = new BufferedImageTranscoder(BufferedImage.TYPE_INT_ARGB);
             transcoder.addTranscodingHint(PNGTranscoder.KEY_WIDTH, 256.0f);
             transcoder.addTranscodingHint(PNGTranscoder.KEY_HEIGHT, 256.0f);
@@ -72,21 +75,24 @@ public class IconCreator {
     }
 
     // Create Icons
-    public void createIcon() throws IOException {
+    public Pair<Path, BufferedImage[]> createIcon() throws IOException {
         BufferedImage[] sizes = new BufferedImage[8];
 
         // Create 16x layer
         sizes[0] = sandwich(16, 16, 0, 0, null, source, null);
-        ImageIO.write(sizes[0], "png", new File("./" + 16 + "x.png"));
+//        ImageIO.write(sizes[0], "png", new File("./" + 16 + "x.png"));
 
         // Create The Rest
         for (int i = 0; i < 7; i++) {
             sizes[i + 1] = sandwich(pixelSizes[i], sourceSizes[i], sourceOffsetsX[i], sourceOffsetsY[i], templatesBack[i], source, templatesFront[i]);
-            ImageIO.write(sizes[i + 1], "png", new File("./" + pixelSizes[i] + "x.png"));
+//            ImageIO.write(sizes[i + 1], "png", new File("./" + pixelSizes[i] + "x.png"));
         }
 
         // Write
-        ICOEncoder.write(Arrays.asList(sizes), new File("./icon.ico"));
+        Path temp = Files.createTempFile("iconcreator", null);
+        OutputStream stream = Files.newOutputStream(temp, StandardOpenOption.CREATE, StandardOpenOption.DELETE_ON_CLOSE);
+        ICOEncoder.write(Arrays.asList(sizes), stream);
+        return new Pair<>(temp, sizes);
     }
 
     // Sandwiches the middle image between the two source images

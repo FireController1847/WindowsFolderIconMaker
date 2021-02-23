@@ -1,0 +1,27 @@
+/* Text */
+.label,
+.radio-button,
+.check-box,
+.button {
+    -fx-font-smoothing-type: gray;
+    -fx-text-fill: -fx-color-text;
+    -fx-font-size: 10pt;
+}
+
+/* Buttons */
+.button {
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+    -fx-border-insets: 0;
+    -fx-background-color: -fx-button-background;
+    -fx-border-width: 1px;
+    -fx-border-color: -fx-button-outline;
+}
+.button:hover {
+    -fx-background-color: -fx-button-background-hover;
+    -fx-cursor: hand;
+}
+.button:disabled {
+    -fx-background-color: -fx-button-disabled;
+    -fx-cursor: default;
+}

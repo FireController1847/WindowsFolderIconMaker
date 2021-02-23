@@ -1,0 +1,29 @@
+/* Colors */
+* {
+    -fx-color-text: black;
+    -fx-color-subtext: grey;
+    -fx-color-hyperlink: #0096c9;
+    -fx-color-hyperlink-hover: #32abd3;
+    -fx-color-hyperlink-visited: #0096c9;
+
+    -fx-color-black: #ffffff;
+    -fx-color-background: #f0f0f0;
+    -fx-color-background-lighter: #e0e0e0;
+    -fx-color-white: #000000;
+
+    -fx-radio-background: #d0d0d0;
+    -fx-radio-background-hover: #a0a0a0;
+    -fx-radio-background-selected: #808080;
+
+    -fx-scroll-background: #e0e0e0;
+    -fx-scroll-bar: #d0d0d0;
+    -fx-scroll-bar-hover: #c0c0c0;
+
+    -fx-button-disabled: #e0e0e0;
+    -fx-button-background: #d0d0d0;
+    -fx-button-background-hover: #c0c0c0;
+    -fx-button-outline: #c0c0c0;
+
+    -fx-notification-exit: darkgrey; /* Confusingly, DARKGREY is lighter than GREY */
+    -fx-notification-exit-hover: grey;
+}

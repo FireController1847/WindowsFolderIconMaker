@@ -1,0 +1,16 @@
+/* Layout */
+#layout {
+    -fx-background-color: -fx-color-background;
+    -fx-padding: 1.5em;
+}
+
+/* Source File Container */
+#cont-source-file {
+    -fx-spacing: 20px;
+    -fx-padding: 0 0 15px 0;
+}
+
+/* Save Icon Container */
+#cont-save-icon {
+    -fx-padding: 0 0 15px 0;
+}
